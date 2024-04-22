@@ -6,8 +6,9 @@ export function TranlsatePlugin() {
   const ctx = usePluginCtx();
 
   // ctx.addToolbar
-  // ctx.addBubble
-  // ctx.addSlash
+  // ctx.bubble
+  // ctx.slash
+  // ctx.decorate
 
   return <div>Translate Plugin Placeholder</div>;
 }

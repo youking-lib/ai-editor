@@ -36,7 +36,7 @@ A line of plain text in a **paragraph**.
 
 console.log("initialValue", initialValue);
 
-export function ReactAIEditor() {
+export function ReactAIEditor(props: React.PropsWithChildren) {
   const [editor] = useState(() =>
     withShortcuts(withReact(withHistory(createEditor())))
   );
@@ -90,6 +90,7 @@ export function ReactAIEditor() {
             spellCheck
             autoFocus
           />
+          {props.children}
         </Slate>
 
         <Toolbar />
