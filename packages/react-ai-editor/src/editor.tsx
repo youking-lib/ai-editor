@@ -11,6 +11,7 @@ import { Element } from "./element";
 import { SHORTCUTS, withShortcuts } from "./shortcuts";
 import { Leaf, LeafRenderer } from "./leaf";
 import { parse } from "./parse";
+import { EditableVoidPlugin } from "./internal-plugins/editable-void";
 
 const initialValue = parse(`
 # Hello world
@@ -91,6 +92,8 @@ export function ReactAIEditor(props: React.PropsWithChildren) {
             autoFocus
           />
           {props.children}
+
+          <EditableVoidPlugin />
         </Slate>
 
         <Toolbar />

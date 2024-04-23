@@ -1,7 +1,6 @@
 import { BaseEditor } from "slate";
 import { ReactEditor } from "slate-react";
 import { HistoryEditor } from "slate-history";
-
 import {
   NodeTypes,
   CodeBlockNode,
@@ -18,6 +17,8 @@ import {
   TextNode,
 } from "remark-slate";
 
+import { SlateEditableVoidElement } from "./internal-plugins/editable-void";
+
 declare module "slate" {
   interface CustomTypes {
     Editor: BaseEditor & ReactEditor & HistoryEditor;
@@ -31,7 +32,10 @@ declare module "slate" {
       | SlateImageNode
       | SlateBlockQuoteNode
       | SlateInlineCodeMarkNode
-      | SlateThematicBreakNode;
+      | SlateThematicBreakNode
+
+      // Internal Plugin Element
+      | SlateEditableVoidElement;
 
     Text: SlateTextNode | SlateInlineCodeNode;
   }

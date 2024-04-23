@@ -6,8 +6,12 @@ import {
   Separator,
   Theme,
 } from "@radix-ui/themes";
-import { RenderElementProps } from "slate-react";
+import { RenderElementProps, useSlate } from "slate-react";
+import { Editor } from "slate";
+import { useMemo } from "react";
+
 import { SlateHeadingNode } from "./interface";
+import { Plugin } from "./internal-plugins/plugin";
 
 const SlateHeadingUIMap: Record<SlateHeadingNode["type"], HeadingProps> = {
   heading_one: {
@@ -36,11 +40,21 @@ const SlateHeadingUIMap: Record<SlateHeadingNode["type"], HeadingProps> = {
   },
 };
 
-export const Element = ({
-  attributes,
-  children,
-  element,
-}: RenderElementProps) => {
+export const Element = (props: RenderElementProps) => {
+  const { attributes, children, element } = props;
+
+  const slate = useSlate();
+  const pluginRendererElement = useMemo(
+    () => getPluginRenderElement(slate),
+    [slate]
+  );
+
+  const pluginNode = pluginRendererElement(props);
+
+  if (pluginNode) {
+    return pluginNode;
+  }
+
   switch (element.type) {
     case "heading_one":
     case "heading_two":
@@ -81,3 +95,19 @@ export const Element = ({
       return <p {...attributes}>{children}</p>;
   }
 };
+
+function getPluginRenderElement(editor: Editor) {
+  const plugins = Plugin.getPlugins(editor, "Editor").filter(
+    item => item.renderElement
+  );
+
+  return function renderElement(props: RenderElementProps) {
+    for (let i = 0; i < plugins.length; i++) {
+      const node = plugins[i].renderElement?.(props);
+
+      if (node) return node;
+    }
+
+    return null;
+  };
+}
