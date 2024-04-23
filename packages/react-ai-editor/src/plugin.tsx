@@ -1,7 +1,7 @@
 // Plugin is A React Component
 
 import { useEffect } from "react";
-import { EditableVoidProvider } from "./internal-plugin/editable-void";
+import { EditableVoidProvider } from "./internal-plugins/editable-void";
 
 export class PluginContext {}
 

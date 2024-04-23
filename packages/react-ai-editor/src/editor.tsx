@@ -3,7 +3,7 @@ import { useCallback, useState } from "react";
 import { BookmarkIcon, GlobeIcon } from "@radix-ui/react-icons";
 import { Editable, ReactEditor, Slate, withReact } from "slate-react";
 import { createEditor, Editor, Node, Element as SlateElement } from "slate";
-import { Button, Card, Flex, IconButton, Theme } from "@radix-ui/themes";
+import { Button, Card, Flex, IconButton, Inset, Theme } from "@radix-ui/themes";
 
 import "@radix-ui/themes/styles.css";
 
@@ -12,6 +12,7 @@ import { SHORTCUTS, withShortcuts } from "./shortcuts";
 import { Leaf, LeafRenderer } from "./leaf";
 import { parse } from "./parse";
 import { EditableVoidPlugin } from "./internal-plugins/editable-void";
+import { BubblePlugin } from "./plugins/bubble";
 
 const initialValue = parse(`
 # Hello world
@@ -83,18 +84,21 @@ export function ReactAIEditor(props: React.PropsWithChildren) {
   return (
     <Theme>
       <Card>
-        <Slate editor={editor} initialValue={initialValue}>
-          <Editable
-            renderLeaf={props => <LeafRenderer {...props} />}
-            renderElement={props => <Element {...props} />}
-            onDOMBeforeInput={handleDOMBeforeInput}
-            spellCheck
-            autoFocus
-          />
-          {props.children}
+        <Inset clip="border-box" style={{ position: "relative" }} m="2">
+          <Slate editor={editor} initialValue={initialValue}>
+            <Editable
+              renderLeaf={props => <LeafRenderer {...props} />}
+              renderElement={props => <Element {...props} />}
+              onDOMBeforeInput={handleDOMBeforeInput}
+              spellCheck
+              autoFocus
+            />
+            {props.children}
 
-          <EditableVoidPlugin />
-        </Slate>
+            <EditableVoidPlugin />
+            <BubblePlugin />
+          </Slate>
+        </Inset>
 
         <Toolbar />
       </Card>
