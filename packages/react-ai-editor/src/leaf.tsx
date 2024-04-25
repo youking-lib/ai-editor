@@ -1,8 +1,22 @@
-import { Text } from "slate";
+import { Editor, Text } from "slate";
 import { RenderLeafProps } from "slate-react";
 import { Code, Em, Strong } from "@radix-ui/themes";
 
 import { SlateInlineCodeNode } from "./interface";
+
+export const withLeaf = (editor: Editor) => {
+  const { isInline } = editor;
+
+  editor.isInline = value => {
+    if (value.type === "link") {
+      return true;
+    }
+
+    return isInline(value);
+  };
+
+  return editor;
+};
 
 export function LeafRenderer({ leaf, children, attributes }: RenderLeafProps) {
   if (Leaf.isInlineCode(leaf)) {

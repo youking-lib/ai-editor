@@ -2,7 +2,15 @@ import { Editor, Range } from "slate";
 import { useEffect, useRef, useState } from "react";
 import { useFocused, useSlate, useSlateSelection } from "slate-react";
 import { BookmarkIcon, GlobeIcon } from "@radix-ui/react-icons";
-import { Button, Flex, IconButton, Popover } from "@radix-ui/themes";
+import {
+  Box,
+  Button,
+  Flex,
+  IconButton,
+  Popover,
+  Select,
+  Separator,
+} from "@radix-ui/themes";
 import { posToOffsetRect } from "../utils/posToOffsetRect";
 
 export const BubblePluginKey = "Bubble";
@@ -24,11 +32,6 @@ export function BubblePlugin() {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    if (!isFocus) {
-      setOpen(false);
-      return setTrgglerStyle(defaultPosition);
-    }
-
     const rect = Bubble.getSelectionRect(editor);
 
     if (rect && ref.current) {
@@ -43,7 +46,7 @@ export function BubblePlugin() {
       setTrgglerStyle(defaultPosition);
       setOpen(false);
     }
-  }, [editor, selection]);
+  }, [editor, selection, isFocus]);
 
   return (
     <Popover.Root open={open}>
@@ -54,23 +57,41 @@ export function BubblePlugin() {
         />
       </Popover.Trigger>
       <Popover.Content
+        onOpenAutoFocus={e => e.preventDefault()}
+        maxWidth="360px"
+        minWidth="360px"
+        align="center"
         width="360px"
         side="top"
-        onOpenAutoFocus={e => e.preventDefault()}
+        size="1"
       >
-        <Flex justify="between">
-          <Flex gap="2" align="center">
-            <IconButton size="1" variant="ghost" autoFocus={false}>
-              <BookmarkIcon />
-            </IconButton>
-            <IconButton size="1" variant="ghost" autoFocus={false}>
+        <Flex gap="3" align="center">
+          <Flex align="center" gap="2">
+            <Select.Root defaultValue="apple" size="1">
+              <Select.Trigger variant="soft">EN</Select.Trigger>
+              <Select.Content>
+                <Select.Item value="apple">English</Select.Item>
+                <Select.Item value="orange">Chinese</Select.Item>
+              </Select.Content>
+            </Select.Root>
+            <IconButton size="2" variant="ghost">
               <GlobeIcon />
             </IconButton>
           </Flex>
-          <Button size="1" variant="soft" autoFocus={false}>
+
+          <Separator orientation="vertical" />
+
+          <IconButton size="2" variant="ghost">
+            <BookmarkIcon />
+          </IconButton>
+        </Flex>
+
+        {/* <Flex justify="between">
+          
+          <Button size="1" variant="soft">
             Share
           </Button>
-        </Flex>
+        </Flex> */}
       </Popover.Content>
     </Popover.Root>
   );

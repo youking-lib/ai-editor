@@ -4,6 +4,7 @@ import {
   Heading,
   HeadingProps,
   Separator,
+  Text,
   Theme,
 } from "@radix-ui/themes";
 import { RenderElementProps, useSlate } from "slate-react";
@@ -90,6 +91,12 @@ export const Element = (props: RenderElementProps) => {
             </pre>
           </Card>
         </Theme>
+      );
+    case "paragraph":
+      return (
+        <Text my="2" {...attributes} as="p">
+          {children}
+        </Text>
       );
     default:
       return <p {...attributes}>{children}</p>;
